@@ -49,8 +49,12 @@ public class Register {
      * @param person person to append to this register
      */
     public void addPerson(Person person) {
-        persons[count] = person;
-        count++;
+        if(findPersonByName(person.getName()) == null && findPersonByPhoneNumber(person.getPhoneNumber()) == null){
+            persons[count] = person;
+            count++;
+            return;
+        }
+        System.out.println("Cislo alebo meno sa uz v zozname nachadza!");
     }       
     
     //TODO: Implement the method findPersonByName
