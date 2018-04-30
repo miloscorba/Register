@@ -92,12 +92,17 @@ public class ConsoleUI {
         int personIterator = 0;
         System.out.println(ANSI_YELLOW + "------------------------");
         System.out.println("Telefonny zoznam:");
-        do{
-            Person person = register.getPerson(personIterator);
-            System.out.println(personIterator+1 + ". " + person.getName() + " (" + person.getPhoneNumber() + ")");
-            personIterator++;
-        } while (register.getPerson(personIterator) != null);
+        if(register.getCount() == 0){
+            System.out.println("Prazdny zoznam! Vlozte polozky");
+        } else {
+            while (personIterator != register.getCount()) {
+                Person person = register.getPerson(personIterator);
+                System.out.println(personIterator + 1 + ". " + person.getName() + " (" + person.getPhoneNumber() + ")");
+                personIterator++;
+            }
+            }
         System.out.println("------------------------" + ANSI_RESET);
+
     }
     
     private void addToRegister() {
@@ -106,11 +111,10 @@ public class ConsoleUI {
         System.out.println("Enter Phone Number: ");
         String phoneNumber = readLine();
 
-        Person person = register.findPersonByName(name);
-        Person person2 = register.findPersonByPhoneNumber(phoneNumber);
-
-        if(person == null && person2 == null) {
+        try {
             register.addPerson(new Person(name, phoneNumber));
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -178,7 +182,11 @@ public class ConsoleUI {
         System.out.println("Enter index: ");
         int index = Integer.parseInt(readLine());
         Person person = register.getPerson(index - 1);
-        register.removePerson(person);
+        try {
+            register.removePerson(person);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 

@@ -40,7 +40,7 @@ public class Register {
      * @param index index of the person to return 
      * @return person the person at the specified position in this register 
      */
-    public Person getPerson(int index) {
+    public Person getPerson(int index){
         return persons[index];
     }
 
@@ -48,13 +48,18 @@ public class Register {
      * Appends the specified person to the end of this register. 
      * @param person person to append to this register
      */
-    public void addPerson(Person person) {
+    public void addPerson(Person person) throws IllegalArgumentException {
+        if(count == getSize()){
+            System.out.println("----------------------------------------");
+            throw  new IllegalArgumentException("Zoznam je plny!!");
+
+        }
         if(findPersonByName(person.getName()) == null && findPersonByPhoneNumber(person.getPhoneNumber()) == null){
             persons[count] = person;
             count++;
-            return;
+        } else {
+            throw new IllegalArgumentException("Cislo alebo meno sa uz v zozname nachadza!");
         }
-        System.out.println("Cislo alebo meno sa uz v zozname nachadza!");
     }       
     
     //TODO: Implement the method findPersonByName
@@ -100,14 +105,22 @@ public class Register {
      * Removes the specified person from the register.
      * @param person person to remove
      */
-    public void removePerson(Person person) {
+    public void removePerson(Person person) throws IllegalArgumentException {
+        boolean remove = false;
+        if(count == 0){
+            throw  new IllegalArgumentException("Prazdny zoznam!");
+        }
         for(int numberOfDeleted = 0; numberOfDeleted < persons.length -1; numberOfDeleted++){
-            if(person.equals(persons[numberOfDeleted])){
+            if(person == persons[numberOfDeleted]){
                 System.arraycopy(persons, numberOfDeleted + 1, persons, numberOfDeleted,
                         persons.length - 1 - numberOfDeleted);
                 count--;
+                remove = true;
                 return;
             }
+        }
+        if(!remove){
+            throw new IllegalArgumentException("Nenachadza sa v zozname");
         }
     }
 }

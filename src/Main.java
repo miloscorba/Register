@@ -4,7 +4,7 @@
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Register register = new Register(20);
+        Register register = new Register(5);
 
         register.addPerson(new Person("Janko Hrasko", "0900123456"));
         register.addPerson(new Person("Jana Petrova", "56467541564"));
