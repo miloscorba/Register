@@ -4,7 +4,9 @@
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Register register = new Register(5);
+        //ArrayRegister register = new ArrayRegister(5);
+
+        ListRegister register = new ListRegister();
 
         register.addPerson(new Person("Janko Hrasko", "0900123456"));
         register.addPerson(new Person("Jana Petrova", "56467541564"));

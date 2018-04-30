@@ -3,7 +3,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PersonTest {
+public class PersonTest{
+
     Person person = new Person("Adam", "56465465464");
     Person personTwo = new Person("Anakonda", "455416156444");
 

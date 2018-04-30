@@ -1,22 +1,17 @@
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class RegisterTest {
-    Register register;
+    ArrayRegister register;
 
     @Before
     public void setUp() throws Exception {
-        register = new Register(20);
+        register = new ArrayRegister(20);
         register.addPerson(new Person("Janko", "123456789"));
         register.addPerson(new Person("Peter", "4542345645"));
         register.addPerson(new Person("Katka", "897542664"));
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     @Test

@@ -8,8 +8,10 @@ import java.util.regex.Pattern;
  * User interface of the application.
  */
 public class ConsoleUI {
-    /** register.Register of persons. */
-    private Register register;
+    /** register.ArrayRegister of persons. */
+    //private ArrayRegister register;
+    private ListRegister register;
+
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -33,9 +35,14 @@ public class ConsoleUI {
         PRINT, ADD, UPDATE, REMOVE, FIND, EXIT
     };
     
-    public ConsoleUI(Register register) {
+    //public ConsoleUI(ArrayRegister register) {
+    //    this.register = register;
+    //}
+
+    public ConsoleUI(ListRegister register) {
         this.register = register;
     }
+
     
     public void run() {
         while (true) {
@@ -47,15 +54,28 @@ public class ConsoleUI {
                     addToRegister();
                     break;
                 case UPDATE:
-                    updateRegister();
+                    try {
+                        updateRegister();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(ANSI_RED + e.getMessage() + ANSI_RESET);
+                    }
                     break;
                 case REMOVE:
-                    removeFromRegister();
+                    try {
+                        removeFromRegister();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(ANSI_RED + e.getMessage() + ANSI_RESET);
+                    }
                     break;
                 case FIND:
-                    findInRegister();
+                    try {
+                        findInRegister();
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(ANSI_RED + e.getMessage() + ANSI_RESET);
+                    }
                     break;
                 case EXIT:
+
                     return;
             }
         }
@@ -92,10 +112,10 @@ public class ConsoleUI {
         int personIterator = 0;
         System.out.println(ANSI_YELLOW + "------------------------");
         System.out.println("Telefonny zoznam:");
-        if(register.getCount() == 0){
+        if(register.getSize() == 0){
             System.out.println("Prazdny zoznam! Vlozte polozky");
         } else {
-            while (personIterator != register.getCount()) {
+            while (personIterator != register.getSize()) {
                 Person person = register.getPerson(personIterator);
                 System.out.println(personIterator + 1 + ". " + person.getName() + " (" + person.getPhoneNumber() + ")");
                 personIterator++;
@@ -118,15 +138,13 @@ public class ConsoleUI {
         }
     }
 
-    private void updateRegister() {
+    private void updateRegister() throws IllegalArgumentException {
         System.out.println("Enter Name for Update: ");
         String name = readLine();
         Person person = register.findPersonByName(name);
         if(person == null){
             System.out.println(ANSI_RED + "----------------");
-            System.out.println("Meno neexistuje!");
-            System.out.println("----------------" + ANSI_RESET);
-            return;
+            throw  new IllegalArgumentException("Meno neexistuje!"+ ANSI_RESET);
         }
         System.out.println("Enter NEW name: ");
         String newName = readLine();
@@ -153,7 +171,7 @@ public class ConsoleUI {
     }
     
     //TODO: Implement the method findInRegister
-    private void findInRegister() {
+    private void findInRegister() throws  IllegalArgumentException {
         System.out.println("Enter phone or number to find in register: ");
         String numberOrName = readLine();
 
@@ -171,21 +189,25 @@ public class ConsoleUI {
             System.out.println(person.getName() + "(" + person.getPhoneNumber() + ")");
             System.out.println("------------------------" + ANSI_RESET);
         } else {
-            System.out.println(ANSI_YELLOW + "---------------------------------");
-            System.out.println("Dany zaznam sa v zozname nenachadza!");
-            System.out.println("------------------------" + ANSI_RESET);
+            throw new IllegalArgumentException("Meno alebo cislo sa v zozname nenachadza!");
         }
 
     }
     
-    private void removeFromRegister() {
+    private void removeFromRegister() throws IllegalArgumentException {
         System.out.println("Enter index: ");
+
         int index = Integer.parseInt(readLine());
-        Person person = register.getPerson(index - 1);
-        try {
-            register.removePerson(person);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+        if(index < register.getCount()+1 && index >= 1) {
+            Person person = register.getPerson(index - 1);
+            try {
+                register.removePerson(person);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        else{
+            throw  new IllegalArgumentException("Neplatny vstup!");
         }
     }
 
