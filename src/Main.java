@@ -1,19 +1,30 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.List;
+
 /**
  * Created by jaro on 3.2.2014.
  */
 public class Main {
+    public static final String FILENAME = "register.bin";
 
     public static void main(String[] args) throws Exception {
-        //ArrayRegister register = new ArrayRegister(5);
+        //Register register = new ArrayRegister(20);
+        ListRegister listRegister = new ListRegister();
+        try (FileInputStream is = new FileInputStream(FILENAME);
+             ObjectInputStream ois = new ObjectInputStream(is)) {
+            listRegister.setPersonList((List<Person>) ois.readObject());
+        } catch (Exception e){
+        }
 
-        ListRegister register = new ListRegister();
-
-        register.addPerson(new Person("Janko Hrasko", "0900123456"));
-        register.addPerson(new Person("Jana Petrova", "56467541564"));
-        register.addPerson(new Person("Adam Kolonicky", "454421478"));
-        register.addPerson(new Person("Matus Stastny", "32134654654"));
-
-        ConsoleUI ui = new ConsoleUI(register);
+        ConsoleUI ui = new ConsoleUI(listRegister);
         ui.run();
+
+        try (FileOutputStream os = new FileOutputStream(FILENAME, false);
+             ObjectOutputStream oos = new ObjectOutputStream(os);) {
+            oos.writeObject(listRegister.getPersonList());
+        }
     }
 }
